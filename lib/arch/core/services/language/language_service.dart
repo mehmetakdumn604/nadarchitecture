@@ -21,7 +21,7 @@ class LanguageService {
       );
 
   Future<void> changeLanguage(ln) async {
-    await localService.write(LocalConstants.language, ln);
+     localService.write(LocalConstants.language, ln);
   }
 }
 """;

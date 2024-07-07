@@ -19,6 +19,6 @@ class ThemeService {
       isSavedDarkMode() == true ? ThemeMode.dark : ThemeMode.light;
 
   Future<void> changeTheme(value) async =>
-      await localService.write(LocalConstants.theme, value);
+       localService.write(LocalConstants.theme, value);
 }
 """;

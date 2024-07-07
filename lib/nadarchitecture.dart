@@ -5,20 +5,19 @@ library nadarchitecture;
 import 'dart:io';
 
 import 'arch/common/viewModels/language_view_model.dart';
-import 'arch/core/constants/notification/notification_constants.dart';
-import 'arch/core/services/language/language_service.dart';
-import 'arch/core/services/language/languages/l10n.dart';
-import 'arch/core/services/network/network_exception.dart';
-
 import 'arch/common/viewModels/theme_view_model.dart';
+import 'arch/core/base/model/base_model.dart';
 import 'arch/core/base/view/base_view.dart';
 import 'arch/core/base/viewModel/base_view_model.dart';
 import 'arch/core/constants/app/app_constants.dart';
+import 'arch/core/constants/colors/color_constants.dart';
+import 'arch/core/constants/endPoints/end_point_constants.dart';
 import 'arch/core/constants/enums/app_themes_enums.dart';
 import 'arch/core/constants/enums/http_types_enums.dart';
 import 'arch/core/constants/enums/network_results_enums.dart';
 import 'arch/core/constants/local/local_constants.dart';
 import 'arch/core/constants/navigation/navigation_constants.dart';
+import 'arch/core/constants/notification/notification_constants.dart';
 import 'arch/core/constants/textStyles/text_style_constants.dart';
 import 'arch/core/constants/theme/theme_constants.dart';
 import 'arch/core/exports/constants_exports.dart';
@@ -26,9 +25,12 @@ import 'arch/core/extensions/context_extension.dart';
 import 'arch/core/extensions/sized_box_extension.dart';
 import 'arch/core/mixins/device_orientation.dart';
 import 'arch/core/mixins/show_bar.dart';
+import 'arch/core/services/language/language_service.dart';
+import 'arch/core/services/language/languages/l10n.dart';
 import 'arch/core/services/local/local_service.dart';
 import 'arch/core/services/navigation/navigation_route.dart';
 import 'arch/core/services/navigation/navigation_service.dart';
+import 'arch/core/services/network/network_exception.dart';
 import 'arch/core/services/network/network_service.dart';
 import 'arch/core/services/network/response_parser.dart';
 import 'arch/core/services/notification/awesomeNotification/awesome_notification_service.dart';
@@ -39,12 +41,9 @@ import 'arch/core/services/theme/theme_service.dart';
 import 'arch/main.dart';
 import 'arch/pages/home/model/post_model.dart';
 import 'arch/pages/home/model/post_model.g.dart';
-import 'arch/pages/home/widget/one_item.dart';
-import 'arch/core/base/model/base_model.dart';
-import 'arch/core/constants/colors/color_constants.dart';
-import 'arch/core/constants/endPoints/end_point_constants.dart';
 import 'arch/pages/home/view/home_view.dart';
 import 'arch/pages/home/viewModel/home_view_model.dart';
+import 'arch/pages/home/widget/one_item.dart';
 import 'scripts/build_sh.dart';
 
 const l10nYaml = """
@@ -174,14 +173,20 @@ class Architecture {
   static Future<void> createArchitecture() async {
     const srcFolder = 'lib/src';
     await Directory(srcFolder).create();
+    const assetsFolder = 'assets/';
+    await Directory(assetsFolder).create();
+    const assetsImagesFolder = 'assets/images/';
+    await Directory(assetsImagesFolder).create();
+    const assetsIconsFolder = 'assets/icons/';
+    await Directory(assetsIconsFolder).create();
     const l10nFile = './l10n.yaml';
     await File(l10nFile).writeAsString(l10nYaml);
     const buildGradleFile = './android/app/build.gradle';
     var lines = await File(buildGradleFile).readAsLines();
     var tempLines = [];
     tempLines.addAll(lines);
-    for(int i = 0; i<lines.length;i++){
-      if(lines[i].contains('minSdkVersion')){
+    for (int i = 0; i < lines.length; i++) {
+      if (lines[i].contains('minSdkVersion')) {
         tempLines[i] = '        minSdkVersion 21';
       }
     }
@@ -197,19 +202,7 @@ class Architecture {
   static Future<void> changePubspecYaml() async {
     const pubspecYaml = './pubspec.yaml';
     final List<String> lines = File(pubspecYaml).readAsLinesSync();
-    var tempLines = [
-      lines[0],
-      lines[1],
-      '',
-      lines[4],
-      '',
-      lines[18],
-      '',
-      lines[20],
-      lines[21],
-      '\n',
-      pubspec
-    ];
+    var tempLines = [lines[0], lines[1], '', lines[4], '', lines[18], '', lines[20], lines[21], '\n', pubspec];
     await File(pubspecYaml).writeAsString(tempLines.join('\n'));
   }
 
@@ -224,10 +217,8 @@ class Architecture {
     await File('$controllers/connection_view_model.dart')
         .writeAsString(connectionViewModel);
      */
-    await File('$controllers/theme_view_model.dart')
-        .writeAsString(themeViewModel);
-    await File('$controllers/language_view_model.dart')
-        .writeAsString(languageViewModel);
+    await File('$controllers/theme_view_model.dart').writeAsString(themeViewModel);
+    await File('$controllers/language_view_model.dart').writeAsString(languageViewModel);
   }
 
   static Future<void> createCore() async {
@@ -251,8 +242,7 @@ class Architecture {
     // base view model
     const baseViewModelI = '$base/viewModel';
     await Directory(baseViewModelI).create();
-    await File('$baseViewModelI/base_view_model.dart')
-        .writeAsString(baseViewModel);
+    await File('$baseViewModelI/base_view_model.dart').writeAsString(baseViewModel);
 
     // constants
     const constants = '$core/constants';
@@ -266,72 +256,60 @@ class Architecture {
     // color constants
     const colorConstantsI = '$constants/colors';
     await Directory(colorConstantsI).create();
-    await File('$colorConstantsI/color_constants.dart')
-        .writeAsString(colorConstants);
+    await File('$colorConstantsI/color_constants.dart').writeAsString(colorConstants);
 
     // endPoint constants
     const endPointConstantsI = '$constants/endPoints';
     await Directory(endPointConstantsI).create();
-    await File('$endPointConstantsI/end_point_constants.dart')
-        .writeAsString(endPointConstants);
+    await File('$endPointConstantsI/end_point_constants.dart').writeAsString(endPointConstants);
 
     // enums
     const enums = '$constants/enums';
     await Directory(enums).create();
     await File('$enums/app_themes_enums.dart').writeAsString(appThemesEnums);
     await File('$enums/http_types_enums.dart').writeAsString(httpTypesEnums);
-    await File('$enums/network_results_enums.dart')
-        .writeAsString(networkResultEnums);
+    await File('$enums/network_results_enums.dart').writeAsString(networkResultEnums);
 
     // navigation constants
     const navigationConstantsI = '$constants/navigation';
     await Directory(navigationConstantsI).create();
-    await File('$navigationConstantsI/navigation_constants.dart')
-        .writeAsString(navigationConstants);
+    await File('$navigationConstantsI/navigation_constants.dart').writeAsString(navigationConstants);
 
     // text styles constants
     const testStyleConstantsI = '$constants/textStyles';
     await Directory(testStyleConstantsI).create();
-    await File('$testStyleConstantsI/text_style_constants.dart')
-        .writeAsString(textStyleConstants);
+    await File('$testStyleConstantsI/text_style_constants.dart').writeAsString(textStyleConstants);
 
     // theme constants
     const themeConstantsI = '$constants/theme';
     await Directory(themeConstantsI).create();
-    await File('$themeConstantsI/theme_constants.dart')
-        .writeAsString(themeConstants);
+    await File('$themeConstantsI/theme_constants.dart').writeAsString(themeConstants);
 
     // local constants
     const localConstantsI = '$constants/local';
     await Directory(localConstantsI).create();
-    await File('$localConstantsI/local_constants.dart')
-        .writeAsString(localConstants);
+    await File('$localConstantsI/local_constants.dart').writeAsString(localConstants);
 
     // image constants
     const notificationConstantsI = '$constants/notification';
     await Directory(notificationConstantsI).create();
-    await File('$notificationConstantsI/notification_constants.dart')
-        .writeAsString(notificationConstants);
+    await File('$notificationConstantsI/notification_constants.dart').writeAsString(notificationConstants);
 
     // exports
     const exports = '$core/exports';
     await Directory(exports).create();
-    await File('$exports/constants_exports.dart')
-        .writeAsString(constantExports);
+    await File('$exports/constants_exports.dart').writeAsString(constantExports);
 
     // extensions
     const extensions = '$core/extensions';
     await Directory(extensions).create();
-    await File('$extensions/context_extension.dart')
-        .writeAsString(contextExtension);
-    await File('$extensions/sized_box_extension.dart')
-        .writeAsString(sizedBoxExtension);
+    await File('$extensions/context_extension.dart').writeAsString(contextExtension);
+    await File('$extensions/sized_box_extension.dart').writeAsString(sizedBoxExtension);
 
     // mixins
     const mixins = '$core/mixins';
     await Directory(mixins).create();
-    await File('$mixins/device_orientation.dart')
-        .writeAsString(deviceOrientation);
+    await File('$mixins/device_orientation.dart').writeAsString(deviceOrientation);
     await File('$mixins/show_bar.dart').writeAsString(showBar);
 
     // services
@@ -362,16 +340,13 @@ class Architecture {
     // navigation service
     const navigationServiceI = '$services/navigation';
     await Directory(navigationServiceI).create();
-    await File('$navigationServiceI/navigation_service.dart')
-        .writeAsString(navigationService);
-    await File('$navigationServiceI/navigation_route.dart')
-        .writeAsString(navigationRoute);
+    await File('$navigationServiceI/navigation_service.dart').writeAsString(navigationService);
+    await File('$navigationServiceI/navigation_route.dart').writeAsString(navigationRoute);
 
     // language service
     const languageServiceI = '$services/language';
     await Directory(languageServiceI).create();
-    await File('$languageServiceI/language_service.dart')
-        .writeAsString(languageService);
+    await File('$languageServiceI/language_service.dart').writeAsString(languageService);
     const languageServiceI2 = '$languageServiceI/languages';
     await Directory(languageServiceI2).create();
     await File('$languageServiceI2/l10n.dart').writeAsString(l10n);
@@ -380,32 +355,25 @@ class Architecture {
     // network service
     const networkServiceI = '$services/network';
     await Directory(networkServiceI).create();
-    await File('$networkServiceI/network_service.dart')
-        .writeAsString(networkService);
-    await File('$networkServiceI/network_exception.dart')
-        .writeAsString(networkException);
-    await File('$networkServiceI/response_parser.dart')
-        .writeAsString(responseParser);
+    await File('$networkServiceI/network_service.dart').writeAsString(networkService);
+    await File('$networkServiceI/network_exception.dart').writeAsString(networkException);
+    await File('$networkServiceI/response_parser.dart').writeAsString(responseParser);
 
     // notification service
     const notificationServiceI = '$services/notification';
     await Directory(notificationServiceI).create();
-    await File('$notificationServiceI/notification_service.dart')
-        .writeAsString(notificationService);
+    await File('$notificationServiceI/notification_service.dart').writeAsString(notificationService);
 
     // awesome notification service
     const awesomeNotification = '$notificationServiceI/awesomeNotification';
     await Directory(awesomeNotification).create();
-    await File('$awesomeNotification/awesome_notification_service.dart')
-        .writeAsString(awesomeNotificationService);
-    await File('$awesomeNotification/awesome_schedule_notification.dart')
-        .writeAsString(awesomeScheduleNotification);
+    await File('$awesomeNotification/awesome_notification_service.dart').writeAsString(awesomeNotificationService);
+    await File('$awesomeNotification/awesome_schedule_notification.dart').writeAsString(awesomeScheduleNotification);
 
     // firebase messaging service
     const firebaseMessaging = '$notificationServiceI/firebaseMessaging';
     await Directory(firebaseMessaging).create();
-    await File('$firebaseMessaging/firebase_messaging_service.dart')
-        .writeAsString(firebaseMessagingService);
+    await File('$firebaseMessaging/firebase_messaging_service.dart').writeAsString(firebaseMessagingService);
 
     // theme service
     const themeServiceI = '$services/theme';
@@ -435,8 +403,7 @@ class Architecture {
     // home viewModel
     const homeViewModelI = '$homePage/viewModel';
     await Directory(homeViewModelI).create();
-    await File('$homeViewModelI/home_view_model.dart')
-        .writeAsString(homeViewModel);
+    await File('$homeViewModelI/home_view_model.dart').writeAsString(homeViewModel);
 
     // home widget
     const homeWidget = '$homePage/widget';

@@ -28,7 +28,7 @@ dependencies:
   json_annotation: ^4.8.1
 
   # local notifications
-  awesome_notifications: ^0.7.4+1
+  awesome_notifications:
 
   #firebase notifications
   firebase_messaging: ^14.6.3
