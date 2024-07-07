@@ -65,8 +65,9 @@ class NetworkException with ShowBar, DioMixin {
         return showErrorBar(error, title: 'Bad request');
       case 401:
         // access tokenın süresi bitmişse yenileyip tekrardan istek atıyoruz
-        String? newAccessToken = await NetworkService.instance?.refreshToken();
-        requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+        // String? newAccessToken = await NetworkService.instance?.refreshToken();
+        // requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+        
         return handler.resolve(await fetch(requestOptions));
       case 403:
         return showErrorBar(error, title: 'Forbidden');

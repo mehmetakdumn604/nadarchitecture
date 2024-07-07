@@ -65,7 +65,7 @@ dev_dependencies:
   # cache model generator
   hive_generator: ^2.0.1
   # package name change
-  #package_rename: ^1.6.0
+  package_rename: ^1.6.0
 
 
 

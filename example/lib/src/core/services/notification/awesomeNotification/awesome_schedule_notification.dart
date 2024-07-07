@@ -12,7 +12,7 @@ class AwesomeScheduleNotification {
 
   final awesomeNotification = AwesomeNotifications();
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   dynamic hour;
   dynamic minute;
@@ -173,9 +173,9 @@ class AwesomeScheduleNotification {
         break;
     }
     // bildirim oluşturulduğunda bunu oluşturuldu olarak işaretliyoruz
-    await localService.write(LocalConstants.notificationStatus, true);
+     localService.write(LocalConstants.notificationStatus, true);
     // bildirimin zamanını kaydediyoruz
-    await localService.write(
+     localService.write(
       LocalConstants.notificationTime,
       lastDate.toIso8601String(),
     );
