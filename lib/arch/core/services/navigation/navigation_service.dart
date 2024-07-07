@@ -7,6 +7,10 @@ abstract class INavigationService {
   Future<void> navigateToPage({String? path, Object? data});
 
   Future<void> navigateToPageClear({String? path, Object? data});
+  
+  Future<void> navigateToPageReplacement({String path, Object data});
+
+  Future<void> pop();
 }
 
 class NavigationService implements INavigationService {
@@ -30,6 +34,16 @@ class NavigationService implements INavigationService {
   Future<void> navigateToPageClear({String? path, Object? data}) async {
     await navigatorKey.currentState!
         .pushNamedAndRemoveUntil(path!, removeAllOldRoutes, arguments: data);
+  }
+
+  @override
+  Future<void> navigateToPageReplacement({String? path, Object? data}) async {
+    await navigatorKey.currentState!.pushReplacementNamed(path!, arguments: data);
+  }
+
+  @override
+  Future<void> pop() async {
+    navigatorKey.currentState!.pop();
   }
 }
 """;

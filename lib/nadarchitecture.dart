@@ -4,58 +4,54 @@ library nadarchitecture;
 
 import 'dart:io';
 
-import 'package:nadarchitecture/arch/common/models/token_model.dart';
-import 'package:nadarchitecture/arch/common/viewModels/language_view_model.dart';
-import 'package:nadarchitecture/arch/core/constants/notification/notification_constants.dart';
-import 'package:nadarchitecture/arch/core/services/language/language_service.dart';
-import 'package:nadarchitecture/arch/core/services/language/languages/l10n.dart';
-import 'package:nadarchitecture/arch/core/services/network/network_exception.dart';
+import 'arch/common/viewModels/language_view_model.dart';
+import 'arch/core/constants/notification/notification_constants.dart';
+import 'arch/core/services/language/language_service.dart';
+import 'arch/core/services/language/languages/l10n.dart';
+import 'arch/core/services/network/network_exception.dart';
 
-import '../../arch/common/viewModels/theme_view_model.dart';
-import '../../arch/core/base/view/base_view.dart';
-import '../../arch/core/base/viewModel/base_view_model.dart';
-import '../../arch/core/constants/app/app_constants.dart';
-import '../../arch/core/constants/enums/app_themes_enums.dart';
-import '../../arch/core/constants/enums/http_types_enums.dart';
-import '../../arch/core/constants/enums/network_results_enums.dart';
-import '../../arch/core/constants/icons/icon_constants.dart';
-import '../../arch/core/constants/local/local_constants.dart';
-import '../../arch/core/constants/navigation/navigation_constants.dart';
-import '../../arch/core/constants/textStyles/text_style_constants.dart';
-import '../../arch/core/constants/theme/theme_constants.dart';
-import '../../arch/core/exports/constants_exports.dart';
-import '../../arch/core/extensions/context_extension.dart';
-import '../../arch/core/extensions/sized_box_extension.dart';
-import '../../arch/core/mixins/device_orientation.dart';
-import '../../arch/core/mixins/show_bar.dart';
-import '../../arch/core/services/local/local_service.dart';
-import '../../arch/core/services/navigation/navigation_route.dart';
-import '../../arch/core/services/navigation/navigation_service.dart';
-import '../../arch/core/services/network/network_service.dart';
-import '../../arch/core/services/network/response_parser.dart';
-import '../../arch/core/services/notification/awesomeNotification/awesome_notification_service.dart';
-import '../../arch/core/services/notification/awesomeNotification/awesome_schedule_notification.dart';
-import '../../arch/core/services/notification/firebaseMessaging/firebase_messaging_service.dart';
-import '../../arch/core/services/notification/notification_service.dart';
-import '../../arch/core/services/size/size_service.dart';
-import '../../arch/core/services/theme/theme_service.dart';
-import '../../arch/main.dart';
-import '../../arch/pages/home/model/post_model.dart';
-import '../../arch/pages/home/model/post_model.g.dart';
-import '../../arch/pages/home/widget/one_item.dart';
-import 'arch/common/models/pagination_model.dart';
+import 'arch/common/viewModels/theme_view_model.dart';
+import 'arch/core/base/view/base_view.dart';
+import 'arch/core/base/viewModel/base_view_model.dart';
+import 'arch/core/constants/app/app_constants.dart';
+import 'arch/core/constants/enums/app_themes_enums.dart';
+import 'arch/core/constants/enums/http_types_enums.dart';
+import 'arch/core/constants/enums/network_results_enums.dart';
+import 'arch/core/constants/local/local_constants.dart';
+import 'arch/core/constants/navigation/navigation_constants.dart';
+import 'arch/core/constants/textStyles/text_style_constants.dart';
+import 'arch/core/constants/theme/theme_constants.dart';
+import 'arch/core/exports/constants_exports.dart';
+import 'arch/core/extensions/context_extension.dart';
+import 'arch/core/extensions/sized_box_extension.dart';
+import 'arch/core/mixins/device_orientation.dart';
+import 'arch/core/mixins/show_bar.dart';
+import 'arch/core/services/local/local_service.dart';
+import 'arch/core/services/navigation/navigation_route.dart';
+import 'arch/core/services/navigation/navigation_service.dart';
+import 'arch/core/services/network/network_service.dart';
+import 'arch/core/services/network/response_parser.dart';
+import 'arch/core/services/notification/awesomeNotification/awesome_notification_service.dart';
+import 'arch/core/services/notification/awesomeNotification/awesome_schedule_notification.dart';
+import 'arch/core/services/notification/firebaseMessaging/firebase_messaging_service.dart';
+import 'arch/core/services/notification/notification_service.dart';
+import 'arch/core/services/theme/theme_service.dart';
+import 'arch/main.dart';
+import 'arch/pages/home/model/post_model.dart';
+import 'arch/pages/home/model/post_model.g.dart';
+import 'arch/pages/home/widget/one_item.dart';
 import 'arch/core/base/model/base_model.dart';
 import 'arch/core/constants/colors/color_constants.dart';
 import 'arch/core/constants/endPoints/end_point_constants.dart';
-import 'arch/core/constants/images/image_constants.dart';
 import 'arch/pages/home/view/home_view.dart';
 import 'arch/pages/home/viewModel/home_view_model.dart';
 import 'scripts/build_sh.dart';
 
 const l10nYaml = """
 arb-dir: lib/src/core/services/language/languages  # l10n.dart dosyasının yolunun belirtildiği kısım
-template-arb-file: app_en.arb # Örnek alınacak dil dosyasının adı
+template-arb-file: intl_en.arb # Örnek alınacak dil dosyasının adı
 output-localization-file: app_localizations.dart # dosyalar oluşturulduktan sonra .dart_tool/flutter_gen/gen_l10n dosyasının altında oluşacak dosyanın ismi
+output_dir: lib/src/core/services/language/languages
 """;
 
 const pubspec = """
@@ -70,10 +66,7 @@ dependencies:
   dio: ^5.2.1+1
 
   # local storage
-  get_storage: ^2.1.1
-
-  # internet connection
-  internet_connection_checker: ^1.0.0+1
+  hive_flutter: ^1.1.0
 
   # internet connection
   connectivity_plus: ^4.0.1
@@ -92,6 +85,16 @@ dependencies:
     sdk: flutter
   intl: ^0.18.1
 
+  # in app review package 
+  in_app_review: ^2.0.9
+  # loading spinner package
+  flutter_easyloading: ^3.0.5
+  # responsive package
+  flutter_screenutil: 5.9.3
+  # svg image package
+  flutter_svg: ^2.0.10+1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -99,11 +102,72 @@ dev_dependencies:
   build_runner: ^2.4.5
   flutter_lints: ^2.0.1
   json_serializable: ^6.7.0
+  # Asset generation
+  flutter_gen: ^5.4.0
+  flutter_gen_runner:
+  # native splash screen
+  flutter_native_splash: ^2.4.0
+  # app icon
+  flutter_launcher_icons: ^0.13.1
+  # cache model generator
+  hive_generator: ^2.0.1
+  # package name change
+  #package_rename: ^1.6.0
+
 
 
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/icons/
+    - assets/images/
+
+flutter_gen:
+  output: lib/src/core/assets_gen/
+  line_length: 80
+
+  integrations:
+    flutter_svg: true
+    lottie: true
+    # flare_flutter: true
+    # rive: true
+
+
+flutter_native_splash:
+  color: "#D93B6A"
+  image: "assets/images/app_logo.png"
+  android: true
+  ios: true
+  android_gravity: center
+  ios_content_mode: center
+  fullscreen: true
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/app_logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+package_rename_config:
+  android:
+    app_name: New App Name
+    package_name: com.new.app
+    override_old_package: com.old.app
+  ios:
+    app_name: # (String) The display name of the ios app
+    bundle_name: # (String) The bundle name of the ios app
+    package_name: # (String) The product bundle identifier of the ios app
+
+
+flutter_intl:
+  enabled: true
+  arb_dir: lib/src/core/services/language/languages  # l10n.dart dosyasının yolunun belirtildiği kısım
+  template-arb-file: intl_en.arb # Örnek alınacak dil dosyasının adı
+  output-localization-file: app_localizations.dart # dosyalar oluşturulduktan sonra .dart_tool/flutter_gen/gen_l10n dosyasının altında oluşacak dosyanın ismi
+  output_dir: lib/src/core/services/language/languages
+
   """;
 
 class Architecture {
@@ -164,12 +228,6 @@ class Architecture {
         .writeAsString(themeViewModel);
     await File('$controllers/language_view_model.dart')
         .writeAsString(languageViewModel);
-
-    // models
-    const models = '$common/models';
-    await Directory(models).create();
-    await File('$models/pagination_model.dart').writeAsString(paginationModel);
-    await File('$models/token_model.dart').writeAsString(tokenModel);
   }
 
   static Future<void> createCore() async {
@@ -224,18 +282,6 @@ class Architecture {
     await File('$enums/http_types_enums.dart').writeAsString(httpTypesEnums);
     await File('$enums/network_results_enums.dart')
         .writeAsString(networkResultEnums);
-
-    // icon constants
-    const iconConstantsI = '$constants/icons';
-    await Directory(iconConstantsI).create();
-    await File('$iconConstantsI/icon_constants.dart')
-        .writeAsString(iconConstants);
-
-    // image constants
-    const imageConstantsI = '$constants/images';
-    await Directory(imageConstantsI).create();
-    await File('$imageConstantsI/image_constants.dart')
-        .writeAsString(imageConstants);
 
     // navigation constants
     const navigationConstantsI = '$constants/navigation';
@@ -329,8 +375,7 @@ class Architecture {
     const languageServiceI2 = '$languageServiceI/languages';
     await Directory(languageServiceI2).create();
     await File('$languageServiceI2/l10n.dart').writeAsString(l10n);
-    await File('$languageServiceI2/app_en.arb').writeAsString('{}');
-    await File('$languageServiceI2/app_tr.arb').writeAsString('{}');
+    await File('$languageServiceI2/intl_en.arb').writeAsString('{}');
 
     // network service
     const networkServiceI = '$services/network';
@@ -361,11 +406,6 @@ class Architecture {
     await Directory(firebaseMessaging).create();
     await File('$firebaseMessaging/firebase_messaging_service.dart')
         .writeAsString(firebaseMessagingService);
-
-    // size service
-    const sizeServiceI = '$services/size';
-    await Directory(sizeServiceI).create();
-    await File('$sizeServiceI/size_service.dart').writeAsString(sizeService);
 
     // theme service
     const themeServiceI = '$services/theme';

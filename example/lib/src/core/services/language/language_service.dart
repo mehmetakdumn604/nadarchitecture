@@ -12,7 +12,7 @@ class LanguageService {
 
   static LanguageService get instance => _instance;
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   Locale getLanguage() => Locale(
         localService.read(LocalConstants.language) ??
@@ -20,6 +20,6 @@ class LanguageService {
       );
 
   Future<void> changeLanguage(ln) async {
-    await localService.write(LocalConstants.language, ln);
+     localService.write(LocalConstants.language, ln);
   }
 }

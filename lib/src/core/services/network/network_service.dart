@@ -65,7 +65,7 @@ class NetworkService with DioMixin, ShowBar {
           headers: {
             Headers.contentTypeHeader: contentType ?? Headers.jsonContentType,
             'Authorization': token ??
-                'Bearer ${LocalService.instance.read(LocalConstants.accessToken)}',
+                'Bearer ${LocalCaching.instance.read(LocalConstants.accessToken)}',
           },
         ),
       );
@@ -97,8 +97,8 @@ class NetworkService with DioMixin, ShowBar {
         parseModel: TokenModel(),
       );
       if (token is TokenModel) {
-        LocalService.instance.write(LocalConstants.accessToken, token.access);
-        LocalService.instance.write(LocalConstants.accessToken, token.refresh);
+        LocalCaching.instance.write(LocalConstants.accessToken, token.access);
+        LocalCaching.instance.write(LocalConstants.accessToken, token.refresh);
         return token.access;
       }
     } catch (error) {

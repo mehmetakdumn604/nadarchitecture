@@ -11,7 +11,7 @@ class ThemeService {
 
   static ThemeService get instance => _instance;
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   bool isSavedDarkMode() => localService.read(LocalConstants.theme) ?? false;
 
@@ -19,5 +19,5 @@ class ThemeService {
       isSavedDarkMode() == true ? ThemeMode.dark : ThemeMode.light;
 
   Future<void> changeTheme(value) async =>
-      await localService.write(LocalConstants.theme, value);
+       localService.write(LocalConstants.theme, value);
 }

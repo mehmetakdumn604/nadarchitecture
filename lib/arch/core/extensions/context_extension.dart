@@ -1,5 +1,6 @@
 const contextExtension = """
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // context ile her sayfa içerisinde kolayca erişmemizi sağlayan kısımlar
 
@@ -12,52 +13,19 @@ extension ContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 }
 
-extension MediaQueryExtension on BuildContext {
-  double get height => mediaQuery.size.height;
+extension PaddingExtensionSymetric on num {
+  EdgeInsets get paddingVertical => EdgeInsets.symmetric(vertical: h);
 
-  double get width => mediaQuery.size.width;
+  EdgeInsets get paddingHorizontal => EdgeInsets.symmetric(horizontal: w);
 
-  double get lowValue => height * 0.01;
+  EdgeInsets get allPadding => EdgeInsets.all(w);
 
-  double get normalValue => height * 0.02;
+  EdgeInsets get onlyLeftPadding => EdgeInsets.only(left: w);
 
-  double get mediumValue => height * 0.04;
+  EdgeInsets get onlyRightPadding => EdgeInsets.only(right: w);
 
-  double get highValue => height * 0.1;
-}
+  EdgeInsets get onlyTopPadding => EdgeInsets.only(top: h);
 
-extension PaddingExtensionAll on BuildContext {
-  EdgeInsets get paddingLow => EdgeInsets.all(lowValue);
-
-  EdgeInsets get paddingNormal => EdgeInsets.all(normalValue);
-
-  EdgeInsets get paddingMedium => EdgeInsets.all(mediumValue);
-
-  EdgeInsets get paddingHigh => EdgeInsets.all(highValue);
-}
-
-extension PaddingExtensionSymetric on BuildContext {
-  EdgeInsets get paddingLowVertical => EdgeInsets.symmetric(vertical: lowValue);
-
-  EdgeInsets get paddingNormalVertical =>
-      EdgeInsets.symmetric(vertical: normalValue);
-
-  EdgeInsets get paddingMediumVertical =>
-      EdgeInsets.symmetric(vertical: mediumValue);
-
-  EdgeInsets get paddingHighVertical =>
-      EdgeInsets.symmetric(vertical: highValue);
-
-  EdgeInsets get paddingLowHorizontal =>
-      EdgeInsets.symmetric(horizontal: lowValue);
-
-  EdgeInsets get paddingNormalHorizontal =>
-      EdgeInsets.symmetric(horizontal: normalValue);
-
-  EdgeInsets get paddingMediumHorizontal =>
-      EdgeInsets.symmetric(horizontal: mediumValue);
-
-  EdgeInsets get paddingHighHorizontal =>
-      EdgeInsets.symmetric(horizontal: highValue);
+  EdgeInsets get onlyBottomPadding => EdgeInsets.only(bottom: h);
 }
 """;

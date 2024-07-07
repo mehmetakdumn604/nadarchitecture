@@ -14,6 +14,7 @@ mixin ShowBar {
     TextStyle? style,
     BuildContext? context,
   }) {
+    ScaffoldMessenger.of(context ?? NavigationService.instance.navigatorKey.currentContext!).clearSnackBars();
     ScaffoldMessenger.of(
             context ?? NavigationService.instance.navigatorKey.currentContext!)
         .showSnackBar(
@@ -45,6 +46,7 @@ mixin ShowBar {
     TextStyle? style,
     BuildContext? context,
   }) {
+    ScaffoldMessenger.of(context ?? NavigationService.instance.navigatorKey.currentContext!).clearSnackBars();
     ScaffoldMessenger.of(
             context ?? NavigationService.instance.navigatorKey.currentContext!)
         .showSnackBar(

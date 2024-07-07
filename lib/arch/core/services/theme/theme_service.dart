@@ -11,7 +11,7 @@ class ThemeService {
 
   static ThemeService get instance => _instance;
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   bool isSavedDarkMode() => localService.read(LocalConstants.theme) ?? false;
 

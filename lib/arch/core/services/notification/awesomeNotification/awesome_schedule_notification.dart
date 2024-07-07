@@ -13,7 +13,7 @@ class AwesomeScheduleNotification {
 
   final awesomeNotification = AwesomeNotifications();
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   dynamic hour;
   dynamic minute;

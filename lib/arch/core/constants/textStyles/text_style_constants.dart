@@ -1,6 +1,7 @@
 const textStyleConstants = """
 import 'package:flutter/material.dart';
 import '../../exports/constants_exports.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // Uygulamadaki yazıların sitilinin belirtildiği ana sınıf
 class TextStyleConstants {
@@ -12,7 +13,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w100,
@@ -29,7 +30,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w300,
@@ -46,7 +47,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w400,
@@ -63,7 +64,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w500,
@@ -80,7 +81,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w600,
@@ -97,7 +98,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w700,
@@ -114,7 +115,7 @@ class TextStyleConstants {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontSize: fontSize ?? 14,
+      fontSize: fontSize ?? 14.sp,
       color: color ?? ColorConstants.black,
       fontFamily: fontFamily ?? AppConstants.fontFamily,
       fontWeight: FontWeight.w800,

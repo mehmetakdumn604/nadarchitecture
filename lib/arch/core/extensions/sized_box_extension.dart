@@ -1,8 +1,9 @@
 const sizedBoxExtension = """
 import 'package:flutter/material.dart';
 
-extension SizedBoxes on int {
-   SizedBox sbh() => SizedBox(height: toDouble());
-   SizedBox sbw() => SizedBox(width: toDouble());
+extension WidgetExtensions on Widget {
+  Widget showByCondition(bool condition) {
+    return condition ? this : const SizedBox.shrink();
+  }
 }
 """;

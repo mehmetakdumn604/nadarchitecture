@@ -13,7 +13,7 @@ class LanguageService {
 
   static LanguageService get instance => _instance;
 
-  final localService = LocalService.instance;
+  final localService = LocalCaching.instance;
 
   Locale getLanguage() => Locale(
         localService.read(LocalConstants.language) ??
