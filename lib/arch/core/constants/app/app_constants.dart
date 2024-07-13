@@ -7,6 +7,8 @@ import '../../../common/viewModels/theme_view_model.dart';
 class AppConstants {
   static const appName = 'AppName';
   static const fontFamily = 'fontFamily';
+  static const privacyLink = '{PRIVACY_LINK}';
+  static const supportMail = '{SUPPORT_MAIL}';
 
   static final defaultProviders = [
     ChangeNotifierProvider<ThemeViewModel>(

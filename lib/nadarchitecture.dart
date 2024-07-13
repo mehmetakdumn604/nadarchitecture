@@ -4,6 +4,8 @@ library nadarchitecture;
 
 import 'dart:io';
 
+import 'package:nadarchitecture/arch/core/extensions/string_extensions.dart';
+
 import 'arch/common/viewModels/language_view_model.dart';
 import 'arch/common/viewModels/theme_view_model.dart';
 import 'arch/core/base/model/base_model.dart';
@@ -305,6 +307,7 @@ class Architecture {
     await Directory(extensions).create();
     await File('$extensions/context_extension.dart').writeAsString(contextExtension);
     await File('$extensions/sized_box_extension.dart').writeAsString(sizedBoxExtension);
+    await File('$extensions/string_extensions.dart').writeAsString(stringExtensions);
 
     // mixins
     const mixins = '$core/mixins';

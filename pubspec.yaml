@@ -46,6 +46,8 @@ dependencies:
   flutter_screenutil: 5.9.3
   # svg image package
   flutter_svg: ^2.0.10+1
+  # to launch url
+  url_launcher: ^6.3.0
 
 
 
