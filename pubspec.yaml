@@ -36,7 +36,7 @@ dependencies:
   # language support
   flutter_localizations:
     sdk: flutter
-  intl: ^0.18.1
+  intl:
 
   # in app review package 
   in_app_review: ^2.0.9

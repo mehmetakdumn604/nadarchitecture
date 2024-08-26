@@ -6,13 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 
 import '../../../../src/core/mixins/show_bar.dart';
-import '../../../common/models/pagination_model.dart';
-import '../../../common/models/token_model.dart';
 import '../../../core/services/network/response_parser.dart';
 import '../../base/model/base_model.dart';
 import '../../exports/constants_exports.dart';
 import '../local/local_service.dart';
-import '../navigation/navigation_service.dart';
 import 'network_exception.dart';
 
 class NetworkService with DioMixin, ShowBar {
@@ -64,8 +61,7 @@ class NetworkService with DioMixin, ShowBar {
           method: type.name,
           headers: {
             Headers.contentTypeHeader: contentType ?? Headers.jsonContentType,
-            'Authorization': token ??
-                'Bearer ${LocalCaching.instance.read(LocalConstants.accessToken)}',
+            'Authorization': token ?? 'Bearer ${LocalCaching.instance.read(LocalConstants.accessToken)}',
           },
         ),
       );
@@ -74,11 +70,8 @@ class NetworkService with DioMixin, ShowBar {
       }
       if (isPagination != true) {
         return responseParser<T, R>(parseModel as BaseModel<T>, response.data);
-      } else {
-        return PaginationModel<T>()
-            .fromJson(response.data as Map<String, dynamic>, parseModel)
-            .results as R;
       }
+      return null;
     } catch (error) {
       // Dio tarafında ya da sunucu tarafında bir hata yoksa burada oluşturuyoruz
       log('Network Service Request Error $error');
@@ -90,22 +83,22 @@ class NetworkService with DioMixin, ShowBar {
   Future<String?> refreshToken() async {
     // tokenı bir süre sonra yenileyeceğimiz zaman istek attığımız yer
     // burası oluyor
-    try {
-      var token = await send<TokenModel, TokenModel>(
-        EndPointConstants.refresh,
-        type: HttpTypes.post,
-        parseModel: TokenModel(),
-      );
-      if (token is TokenModel) {
-        LocalCaching.instance.write(LocalConstants.accessToken, token.access);
-        LocalCaching.instance.write(LocalConstants.accessToken, token.refresh);
-        return token.access;
-      }
-    } catch (error) {
-      await NavigationService.instance.navigateToPageClear(
-        path: NavigationConstants.home,
-      );
-    }
+    // try {
+    //   var token = await send<TokenModel, TokenModel>(
+    //     EndPointConstants.refresh,
+    //     type: HttpTypes.post,
+    //     parseModel: TokenModel(),
+    //   );
+    //   if (token is TokenModel) {
+    //     LocalCaching.instance.write(LocalConstants.accessToken, token.access);
+    //     LocalCaching.instance.write(LocalConstants.accessToken, token.refresh);
+    //     return token.access;
+    //   }
+    // } catch (error) {
+    //   await NavigationService.instance.navigateToPageClear(
+    //     path: NavigationConstants.home,
+    //   );
+    // }
     return null;
   }
 }
