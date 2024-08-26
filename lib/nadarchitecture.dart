@@ -4,6 +4,24 @@ library nadarchitecture;
 
 import 'dart:io';
 
+import 'package:nadarchitecture/arch/core/services/analytics/analytics_service.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/body.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/button.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/button_style.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/configurations.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/content.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/description.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/description_style_model.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/footer.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/header.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/link.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/media.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/paywall_model.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/period.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/model/product.dart';
+import 'package:nadarchitecture/arch/core/services/purchase/purchase_manager.dart';
+import 'package:nadarchitecture/arch/core/services/remote_config/remote_config_service.dart';
+
 import 'arch/common/viewModels/language_view_model.dart';
 import 'arch/common/viewModels/theme_view_model.dart';
 import 'arch/core/base/model/base_model.dart';
@@ -17,7 +35,6 @@ import 'arch/core/constants/enums/http_types_enums.dart';
 import 'arch/core/constants/enums/network_results_enums.dart';
 import 'arch/core/constants/local/local_constants.dart';
 import 'arch/core/constants/navigation/navigation_constants.dart';
-import 'arch/core/constants/notification/notification_constants.dart';
 import 'arch/core/constants/textStyles/text_style_constants.dart';
 import 'arch/core/constants/theme/theme_constants.dart';
 import 'arch/core/exports/constants_exports.dart';
@@ -30,14 +47,6 @@ import 'arch/core/services/language/languages/l10n.dart';
 import 'arch/core/services/local/local_service.dart';
 import 'arch/core/services/navigation/navigation_route.dart';
 import 'arch/core/services/navigation/navigation_service.dart';
-import 'arch/core/services/network/network_exception.dart';
-import 'arch/core/services/network/network_service.dart';
-import 'arch/core/services/network/response_parser.dart';
-import 'arch/core/services/notification/awesomeNotification/awesome_notification_service.dart';
-import 'arch/core/services/notification/awesomeNotification/awesome_schedule_notification.dart';
-import 'arch/core/services/notification/firebaseMessaging/firebase_messaging_service.dart';
-import 'arch/core/services/notification/notification_service.dart';
-import 'arch/core/services/theme/theme_service.dart';
 import 'arch/main.dart';
 import 'arch/pages/home/model/post_model.dart';
 import 'arch/pages/home/model/post_model.g.dart';
@@ -73,11 +82,6 @@ dependencies:
   # create model easily
   json_annotation: ^4.8.1
 
-  # local notifications
-  awesome_notifications: ^0.7.4+1
-
-  #firebase notifications
-  firebase_messaging: ^14.6.3
 
   # language support
   flutter_localizations:
@@ -92,6 +96,16 @@ dependencies:
   flutter_screenutil: 5.9.3
   # svg image package
   flutter_svg: ^2.0.10+1
+  # purchase package
+  adapty_flutter: ^2.10.2
+  # remote config package
+  firebase_remote_config: ^4.4.7
+  # crashlytics package
+  firebase_crashlytics: ^3.5.7
+  # analytics package
+  firebase_analytics: ^10.10.7
+  # app tracking transparency package
+  app_tracking_transparency: ^2.0.6
 
 
 
@@ -213,10 +227,7 @@ class Architecture {
     // viewModels
     const controllers = '$common/viewModels';
     await Directory(controllers).create();
-    /*
-    await File('$controllers/connection_view_model.dart')
-        .writeAsString(connectionViewModel);
-     */
+
     await File('$controllers/theme_view_model.dart').writeAsString(themeViewModel);
     await File('$controllers/language_view_model.dart').writeAsString(languageViewModel);
   }
@@ -316,6 +327,12 @@ class Architecture {
     const services = '$core/services';
     await Directory(services).create();
 
+        // analytics service
+    const analyticsServicePath = '$services/analytics';
+    await Directory(analyticsServicePath).create();
+    await File('$analyticsServicePath/analytics_service.dart').writeAsString(analyticsService);
+
+
     // connection service
     /*
     const connectionServiceI = '$services/connection';
@@ -352,28 +369,32 @@ class Architecture {
     await File('$languageServiceI2/l10n.dart').writeAsString(l10n);
     await File('$languageServiceI2/intl_en.arb').writeAsString('{}');
 
-    // network service
-    const networkServiceI = '$services/network';
-    await Directory(networkServiceI).create();
-    await File('$networkServiceI/network_service.dart').writeAsString(networkService);
-    await File('$networkServiceI/network_exception.dart').writeAsString(networkException);
-    await File('$networkServiceI/response_parser.dart').writeAsString(responseParser);
 
-    // notification service
-    const notificationServiceI = '$services/notification';
-    await Directory(notificationServiceI).create();
-    await File('$notificationServiceI/notification_service.dart').writeAsString(notificationService);
+      // purchase service
+    const purchaseServicePath = '$services/purchase';
+    const purchaseModelServicePath = '$services/purchase/model';
+    await Directory(purchaseServicePath).create();
+    await File('$purchaseServicePath/purchase_manager.dart').writeAsString(purchaseManager);
+    await Directory(purchaseModelServicePath).create();
+    await File('$purchaseModelServicePath/body.dart').writeAsString(bodyModel);
+    await File('$purchaseModelServicePath/button_style.dart').writeAsString(buttonStyleModel);
+    await File('$purchaseModelServicePath/button.dart').writeAsString(buttonModel);
+    await File('$purchaseModelServicePath/configurations.dart').writeAsString(configurationsModel);
+    await File('$purchaseModelServicePath/content.dart').writeAsString(contentModel);
+    await File('$purchaseModelServicePath/description_style_model.dart').writeAsString(descriptionStyleModel);
+    await File('$purchaseModelServicePath/description.dart').writeAsString(descriptionModel);
+    await File('$purchaseModelServicePath/footer.dart').writeAsString(footerModel);
+    await File('$purchaseModelServicePath/header.dart').writeAsString(headerModel);
+    await File('$purchaseModelServicePath/link.dart').writeAsString(linkModel);
+    await File('$purchaseModelServicePath/media.dart').writeAsString(mediaModel);
+    await File('$purchaseModelServicePath/paywall_model.dart').writeAsString(paywallModel);
+    await File('$purchaseModelServicePath/period.dart').writeAsString(periodModel);
+    await File('$purchaseModelServicePath/product.dart').writeAsString(productModel);
 
-    // awesome notification service
-    const awesomeNotification = '$notificationServiceI/awesomeNotification';
-    await Directory(awesomeNotification).create();
-    await File('$awesomeNotification/awesome_notification_service.dart').writeAsString(awesomeNotificationService);
-    await File('$awesomeNotification/awesome_schedule_notification.dart').writeAsString(awesomeScheduleNotification);
-
-    // firebase messaging service
-    const firebaseMessaging = '$notificationServiceI/firebaseMessaging';
-    await Directory(firebaseMessaging).create();
-    await File('$firebaseMessaging/firebase_messaging_service.dart').writeAsString(firebaseMessagingService);
+    // remote config service
+    const remoteConfigService = '$services/remote_config';
+    await Directory(remoteConfigService).create();
+    await File('$remoteConfigService/remote_config_service.dart').writeAsString(remoteConfigServiceString);
 
     // theme service
     const themeServiceI = '$services/theme';

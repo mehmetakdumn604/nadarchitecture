@@ -46,6 +46,11 @@ dependencies:
   flutter_screenutil: 5.9.3
   # svg image package
   flutter_svg: ^2.0.10+1
+  adapty_flutter: ^2.10.2
+  firebase_remote_config: ^4.4.7
+  firebase_crashlytics: ^3.5.7
+  firebase_analytics: ^10.10.7
+  app_tracking_transparency: ^2.0.6
 
 
 
