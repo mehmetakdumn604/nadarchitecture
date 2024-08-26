@@ -301,10 +301,10 @@ class Architecture {
     await Directory(localConstantsI).create();
     await File('$localConstantsI/local_constants.dart').writeAsString(localConstants);
 
-    // image constants
-    const notificationConstantsI = '$constants/notification';
-    await Directory(notificationConstantsI).create();
-    await File('$notificationConstantsI/notification_constants.dart').writeAsString(notificationConstants);
+    // // image constants
+    // const notificationConstantsI = '$constants/notification';
+    // await Directory(notificationConstantsI).create();
+    // await File('$notificationConstantsI/notification_constants.dart').writeAsString(notificationConstants);
 
     // exports
     const exports = '$core/exports';
@@ -396,10 +396,10 @@ class Architecture {
     await Directory(remoteConfigService).create();
     await File('$remoteConfigService/remote_config_service.dart').writeAsString(remoteConfigServiceString);
 
-    // theme service
-    const themeServiceI = '$services/theme';
-    await Directory(themeServiceI).create();
-    await File('$themeServiceI/theme_service.dart').writeAsString(themeService);
+    // // theme service
+    // const themeServiceI = '$services/theme';
+    // await Directory(themeServiceI).create();
+    // await File('$themeServiceI/theme_service.dart').writeAsString(themeService);
   }
 
   static Future<void> createPages() async {
